@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search | Recipe Webpage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Allura&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="Style/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <section class="search_page">
+            <section class="search_top">
+                <div class="search_top_left">
+                    <h2>Full search</h2>
+                    <div class="search_box">
+                        <span class="search_icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 15l6 6m-11-4a7 7 0 1 1 0-14a7 7 0 0 1 0 14" />
+                            </svg>
+                        </span>
+                        <input type="text" placeholder="Search" class="search_input">
+                    </div>
+                    <p class="search_hint">Let's go already!</p>
+                </div>
+
+                <fieldset class="search_filter">
+                    <legend>Search filter : category</legend>
+                    <div class="search_filter_options">
+                        <label><input type="radio" name="category">Seafood</label>
+                        <label><input type="radio" name="category" checked> Beef/Pork</label>
+                        <label><input type="radio" name="category">Chicken</label>
+                        <label><input type="radio" name="category">Snacks</label>
+                        <label><input type="radio" name="category">Pasta</label>
+                        <label><input type="radio" name="category">Vegetarian</label>
+                        <label><input type="radio" name="category">Dessert</label>
+                    </div>
+                </fieldset>
+            </section>
+            <div class="search_results">
+                <article class="search_result">
+                    <div data-category="seafood" class="search_result_category">Category: <span data-category="seafood">Seafood</span></div>
+                    <h3>Search result one</h3>
+                    <p>This will be the excerpt from WordPress, and you can control several things here. Like the length of the text that is shown and multiple other things. Now i just writing stuff to fill it out, and the final three dots indicate there is more text ...</p>
+                </article>
+
+                <article class="search_result">
+                    <div data-category="chicken" class="search_result_category">Category: <span data-category="chicken">Chicken</span></div>
+                    <h3>Search result two</h3>
+                    <p>This will be the excerpt from WordPress, and you can control several things here. Like the length of the text that is shown and multiple other things. Now i just writing stuff to fill it out, and the final three dots indicate there is more text...</p>
+                </article>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const container = document.querySelector('.container');
+
+        function inject(file, position) {
+            return fetch(file)
+                .then(r => r.text())
+                .then(text => {
+                    const doc = new DOMParser().parseFromString(text, 'text/html');
+                    doc.querySelectorAll('script').forEach(s => s.remove());
+                    container.insertAdjacentHTML(position, doc.body.innerHTML);
+                });
+        }
+
+        inject('header.html', 'afterbegin').then(() => {
+            let page = location.pathname.split('/').pop().toLowerCase() || 'index.html';
+            if (!page.includes('.')) page += '.html';
+
+            document.querySelectorAll('.menu_container a').forEach(a => {
+                if (a.getAttribute('href').toLowerCase() === page) {
+                    a.setAttribute('aria-current', 'page');
+                }
+            });
+        });
+        inject('footer.html', 'beforeend');
+    </script>
+</body>
+
+</html>
